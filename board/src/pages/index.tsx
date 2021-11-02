@@ -7,11 +7,20 @@ export default function Home() {
       <Head>
         <title>Board - Organizando suas tarefas.</title>
       </Head>
-      <div>
-        <h1 className={styles.title}>
-          Primeiro projeto <span>NextJS</span>
-        </h1>
-      </div>      
+      <main className={styles.contentContainer}>
+        <img src="images/NotebookTasks.svg" alt="Ferramenta board" />
+        <section className={styles.callToAction}>
+          <h1>Uma ferramenta para seu dia a dia Escreva, planeje e organize-se..</h1>
+          <p>
+            <span>100% Gratuita</span> e online
+          </p>
+        </section>
+        <div className={styles.donators}>
+          <img src="/images/Girl.jfif" alt="Usuário 1" />
+          <img src="/images/Girl.jfif" alt="Usuário 1" />
+          <img src="/images/Girl.jfif" alt="Usuário 1" />
+        </div>
+      </main>      
     </>
   );
 }
