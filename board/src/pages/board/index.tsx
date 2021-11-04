@@ -1,20 +1,63 @@
 import React from "react";
 import Head from "next/head";
+import { GetServerSideProps } from "next";
+import { getSession } from "next-auth/client";
+import { collection, addDoc } from "firebase/firestore";
+import FirebaseDatabase from '../../services/firebaseConnect';
+
+
 import styles from "./styles.module.scss";
 import { FiClock, FiPlus, FiTrash } from "react-icons/fi";
 import { FiCalendar } from "react-icons/fi";
 import { FiEdit2 } from "react-icons/fi";
 import SupportButton from "../../components/SupportButton";
 
-const board = () => {
+
+interface BoardProps{
+  user: {
+    id: string;
+    name: string;
+  },
+}
+
+const board = ({user}: BoardProps) => {
+  const [input, setInput] = React.useState('');
+  console.log(user.name);
+  console.log(user.id);
+
+  async function handleAddTask(event: React.FormEvent){
+    event.preventDefault();
+    if(input === ''){
+      alert('Precha alguma tarefa!');
+      return;
+    }
+    try {
+      const docRef = await addDoc(collection(FirebaseDatabase, "tarefas"), {
+        created: new Date(),
+        tarefa: input,
+        userId: user.id,
+        nome: user.name,
+      });
+      console.log("Deu certo! Tarefa cadastrada com sucesso! ");
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+    
+    console.log(input);
+  }
   return (
     <>
       <Head>
           <title>Minhas tarefas</title>
       </Head>
       <main className={styles.container}>
-        <form>
-          <input type="text" placeholder="Digite sua tarefa..." />
+        <form onSubmit={handleAddTask}>
+          <input 
+          type="text" 
+          placeholder="Digite sua tarefa..." 
+          value={input}
+          onChange={(event) => setInput(event.target.value)}
+          />
           <button type="submit">
             <FiPlus size={25} color="#17181f" />
           </button>
@@ -58,6 +101,30 @@ const board = () => {
       <SupportButton />
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({req}) => {
+  const session = await getSession({req});
+  
+  if(!session?.id){
+    //Se o user não estiver logado
+    return{
+      redirect: {
+        destination: "/",
+        permanent: false,
+      }
+    }
+  }
+  const user = {    
+    id: session?.id,
+    name: session?.user.name,
+  }
+
+  return{
+    props: {
+      user
+    }
+  }
 };
 
 export default board;
