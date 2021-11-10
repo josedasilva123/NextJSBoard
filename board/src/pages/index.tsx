@@ -1,8 +1,15 @@
+import React from 'react';
 import styles from "../../styles/home.module.scss";
 import Head from "next/head";
 import { GetStaticProps } from "next";
 
-export default function Home() {
+export default function Home({data}) {
+  const [donaters, setDonaters] = React.useState([]);
+
+  React.useEffect(() => { 
+    setDonaters(data); 
+  }, [])
+
   return (
     <>
       <Head>
@@ -17,19 +24,30 @@ export default function Home() {
           </p>
         </section>
         <div className={styles.donators}>
-          <img src="/images/Girl.jfif" alt="Usuário 1" />
-          <img src="/images/Girl.jfif" alt="Usuário 1" />
-          <img src="/images/Girl.jfif" alt="Usuário 1" />
+          {donaters.map(donator => (
+            <img key={donator.id} src={donator.image} alt={donator.nome} title={donator.nome} />
+          ))}
         </div>
       </main>      
     </>
   );
 }
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {  
+  const response = await fetch('https://firestore.googleapis.com/v1/projects/boardapp-15d3d/databases/(default)/documents/usuarios/');
+  const json = await response.json();
+
+  const data = json.documents.map(user => {
+    return{
+      id: user.fields.id.stringValue,
+      nome: user.fields.nome.stringValue,
+      image: user.fields.image.stringValue,
+    } 
+  });    
+  
   return{
     props: {
-
+      data,
     },
     revalidate: 60 * 60,
   }

@@ -18,6 +18,9 @@ const Header = () => {
                     <Link href="/board">
                         <a>Meu board</a>
                     </Link>
+                    <Link href="/donate">
+                        <a>Seja VIP</a>
+                    </Link>
                 </nav>               
                 
                 <SignInButton />

@@ -27,19 +27,22 @@ import {
 import SupportButton from "../../components/SupportButton";
 import { format } from "date-fns";
 
+/*
 interface BoardProps {
   user: {
     id: string;
     name: string;
   };
 }
+*/
 
-const board = ({ user }: BoardProps) => {
+const board = ({ user , userData }) => {
   const [input, setInput] = React.useState("");
   const [taskList, setTaskList] = React.useState([]);
   const [taskEdit, setTaskEdit] = React.useState(null);
 
   React.useEffect(() => {
+    /*
     async function getTasks() {
       let data = [];
       const q = query(
@@ -61,6 +64,8 @@ const board = ({ user }: BoardProps) => {
       setTaskList(data);
     }
     getTasks();
+    */
+   setTaskList(userData);
   }, []);
 
   async function handleAddTask(event: React.FormEvent) {
@@ -203,6 +208,8 @@ const board = ({ user }: BoardProps) => {
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const session = await getSession({ req });
+  
+  
 
   if (!session?.id) {
     //Se o user não estiver logado
@@ -219,8 +226,23 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     name: session?.user.name,
   };
 
+  const response = await fetch('https://firestore.googleapis.com/v1/projects/boardapp-15d3d/databases/(default)/documents/tarefas/');
+  const json = await response.json();
+
+  const data = json.documents.map(user => {
+    return{
+      id: user.name.replace('projects/boardapp-15d3d/databases/(default)/documents/tarefas/',''),
+      created: user.fields.created.stringValue,
+      tarefa: user.fields.tarefa.stringValue,
+      userId: user.fields.userId.stringValue,
+      nome: user.fields.nome.stringValue,
+    } 
+  });   
+  const userData = data.filter(element => element.userId == user.id);   
+
   return {
     props: {
+      userData,
       user,
     },
   };
