@@ -1,6 +1,8 @@
 import React from 'react';
 import styles from "../../styles/home.module.scss";
 import Head from "next/head";
+import Image from "next/image"
+import tasks from "../../public/images/NotebookTasks.svg";
 import { GetStaticProps } from "next";
 
 export default function Home({data}) {
@@ -16,7 +18,7 @@ export default function Home({data}) {
         <title>Board - Organizando suas tarefas.</title>
       </Head>
       <main className={styles.contentContainer}>
-        <img src="images/NotebookTasks.svg" alt="Ferramenta board" />
+        <Image src={tasks} alt="Ferramenta board" />
         <section className={styles.callToAction}>
           <h1>Uma ferramenta para seu dia a dia Escreva, planeje e organize-se..</h1>
           <p>
@@ -25,7 +27,7 @@ export default function Home({data}) {
         </section>
         <div className={styles.donators}>
           {donaters.map(donator => (
-            <img key={donator.id} src={donator.image} alt={donator.nome} title={donator.nome} />
+            <Image width={65} height={65} key={donator.id} src={donator.image} alt={donator.nome} title={donator.nome} />
           ))}
         </div>
       </main>      

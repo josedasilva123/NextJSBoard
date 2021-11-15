@@ -5,9 +5,6 @@ import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/client";
 import {
   collection,  
-  query,
-  where,
-  getDocs,
   addDoc,
   deleteDoc,
   updateDoc,
@@ -36,35 +33,12 @@ interface BoardProps {
 }
 */
 
-const board = ({ user , userData }) => {
+const Board = ({ user , userData }) => {
   const [input, setInput] = React.useState("");
   const [taskList, setTaskList] = React.useState([]);
   const [taskEdit, setTaskEdit] = React.useState(null);
 
   React.useEffect(() => {
-    /*
-    async function getTasks() {
-      let data = [];
-      const q = query(
-        collection(FirebaseDatabase, "tarefas"),
-        where("userId", "==", user.id)
-      );
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        const docData = doc.data();
-        const newData = {
-          id: doc.id,
-          created: docData.created,
-          tarefa: docData.tarefa,
-          userId: docData.userId,
-          nome: docData.nome,
-        };
-        data.push(newData);
-      });
-      setTaskList(data);
-    }
-    getTasks();
-    */
    setTaskList(userData);
   }, []);
 
@@ -248,4 +222,4 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   };
 };
 
-export default board;
+export default Board;

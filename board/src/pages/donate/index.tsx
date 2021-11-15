@@ -1,11 +1,13 @@
 import React from "react";
 import styles from "./styles.module.scss";
 import Head from "next/head";
+import Image from "next/image";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/client";
 import { PayPalButtons } from "@paypal/react-paypal-js";
 import { addDoc, collection } from "@firebase/firestore";
 import FirebaseDatabase from "../../services/firebaseConnect";
+import rocket from '../../../public/images/Rocket.svg'
 
 interface donateProps {
   user: {
@@ -32,11 +34,11 @@ const Donate = ({ user }: donateProps) => {
         <title>Ajuda a pltaforma board fica online!</title>
       </Head>
       <main className={styles.container}>
-        <img src="/images/Rocket.svg" alt="Seja Apoiador" />
+        <Image src={rocket} alt="Seja Apoiador" />
 
         {vip && (
             <div className={styles.vip}>
-            <img src={user.image} alt="Foto de perfil do usuário" />
+            <Image width={50} height={50} src={user.image} alt="Foto de perfil do usuário" />
             <span>Parabéns você é um novo apoiador.</span>
             </div>
         )}

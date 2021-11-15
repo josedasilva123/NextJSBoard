@@ -31,6 +31,9 @@
 }
 
 .vip{
+    display: flex;
+    align-items: center;
+    justify-content: center;
     margin-top: 1.5rem;
     background-color: #019950;
     padding: 1rem;
@@ -42,6 +45,8 @@
         height: 50px;
         vertical-align: middle;
         border-radius: 50%;
-        margin-right: 10px;
+    }
+    span{
+        margin-left: 10px;
     }
 }

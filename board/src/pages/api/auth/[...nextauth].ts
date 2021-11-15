@@ -1,7 +1,7 @@
 import { profile } from "console"
 import NextAuth from "next-auth"
 import { session, signIn } from "next-auth/client"
-import GithubProvider from "next-auth/providers/github"
+import GitHubProvider from `next-auth/providers/github`
 
 export default NextAuth({
   // Configure one or more authentication providers
